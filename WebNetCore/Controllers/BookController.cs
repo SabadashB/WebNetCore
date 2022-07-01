@@ -45,6 +45,12 @@ namespace WebNetCore.Controllers
             return Books;
         }
 
+        [HttpGet("{id}")]
+        public Books GetById(int id)
+        {
+            return Books.First();
+        }
+
         [HttpPut("{id}")]
         public void Update(int id, Books weatherForecast)
         {
@@ -55,12 +61,6 @@ namespace WebNetCore.Controllers
         public void Delete(int id)
         {
             Books.Remove(Books[id]);
-        }
-
-        [HttpGet("{id}")]
-        public Books GetById(int id)
-        {
-            return Books.First();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebNetCore
 {
-    public class Books
+    public class Book
     {
         [KeyAttribute]
         public Guid Id { get; set; }

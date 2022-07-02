@@ -40,7 +40,7 @@ namespace WebNetCore.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Book> Get()
+        public IEnumerable<Book> GetAll()
         {
             return Books;
         }

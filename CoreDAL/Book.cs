@@ -4,10 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebNetCore
+namespace CoreDAL
 {
     public class Book
     {
+        public Book()
+        {
+            this.Libraries = new HashSet<Library>();
+        }
         [KeyAttribute]
         public Guid Id { get; set; }
         [Required]
@@ -18,9 +22,9 @@ namespace WebNetCore
         [MinLength(10)]
         [MaxLength(25)]
         public string AuthorName { get; set; }
-        [Required]
         public int Pages { get; set; }
-        [Required]
-        public int Count { get; set; }
+        public int CountOfTaken { get; set; }
+
+        public virtual ICollection<Library> Libraries { get; set; }
     }
 }

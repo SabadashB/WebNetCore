@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CoreDAL;
+using CoreBL;
 
 namespace WebNetCore.Controllers
 {
@@ -11,74 +13,55 @@ namespace WebNetCore.Controllers
     [Route("[controller]")]  
     public class BooksController : ControllerBase
     {
-        private static List<Book> Books { get; set; }
-
-        static BooksController()
-        {
-            Books = new List<Book>();
-            Books.Add(new Book
-            {
-                Id = Guid.NewGuid(),
-                Name = "Game of Thrones",
-                AuthorName = "Jorge Martin",
-                Pages = 415,
-                Count = 802
-            });
-        }
-
         private readonly ILogger<BooksController> _logger;
-        public BooksController(ILogger<BooksController> logger)
+        private readonly IBooksService _booksService;
+        public BooksController(IBooksService booksService, ILogger<BooksController> logger)
         {
+            _booksService = booksService;
             _logger = logger;
         }
 
+
+
         [HttpPost]
-        public void Create(Book book)
+        public IActionResult AddBook(Book book)
         {
-            book.Id = Guid.NewGuid();
-            Books.Add(book);
+            try
+            {
+                var result = _booksService.AddBook(book);
+
+                return Created(result.ToString(), book);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public IEnumerable<Book> GetAll()
         {
-            return Books;
+            return _booksService.GetAllBooks();
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(Guid id)
+        public Book GetBookById(Guid id)
         {
-            Book product = Books.FirstOrDefault(user => user.Id == id);
-            if (product != null)
-            {
-                return Ok(product);
-            }
-            else return NotFound();
+            return _booksService.GetBookById(id);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(Book book)
+        public bool UpdateBook(Guid id, Book book)
         {
-            var dbProduct = Books.FirstOrDefault(x => x.Id == book.Id);
-            if (dbProduct != null)
-            {
-                var index = Books.IndexOf(dbProduct);
-                Books[index] = book;
-            }
-            return NotFound();
+            book.Id = id;
+
+            return _booksService.UpdateBook(book);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(Guid id)
+        public bool DeleteBook(Guid id)
         {
-            Book dbProduct = Books.FirstOrDefault(x => x.Id == id);
-            if (dbProduct != null)
-            {
-                Books.Remove(dbProduct);
-
-                return Ok(dbProduct);
-            }
-            else return NotFound();
+            return _booksService.DeleteBookById(id);
         }
     }
 }

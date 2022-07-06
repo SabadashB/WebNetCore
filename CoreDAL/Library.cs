@@ -19,6 +19,10 @@ namespace CoreDAL
         [MaxLength(25)]
         public string Name { get; set; }
         [Required]
+        [MinLength(4)]
+        [MaxLength(20)]
+        public string City { get; set; }
+        [Required]
         public int XLocation { get; set; }
         [Required]
         public int YLocation { get; set; }

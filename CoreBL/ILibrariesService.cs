@@ -9,6 +9,5 @@ namespace CoreBL
     {
         IEnumerable<Library> GetAllBooks();
         Guid AddBook(Library library);
-        List<Book> FindLocation(int radius);
     }
 }
